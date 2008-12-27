@@ -31,7 +31,8 @@ import javax.media.j3d.*;
 
 import com.sun.j3d.utils.universe.*;
 import com.sun.j3d.utils.image.TextureLoader;
-import java.awt.*;
+import java.io.File;
+
 import javax.swing.JPanel;
 import javax.vecmath.*;
 
@@ -77,38 +78,20 @@ public class WebcamPane extends JPanel
 
   private VirtualUniverse universe;
 
-/**
- * @param args
- */
-  public static void main(String[] args) {
+  /**
+   * The image to display.
+   */
+  private File imageFile;
+
+  /**
+   * Webcam pane constructor.
+   *
+   * @param image Image file
+   */
+  public WebcamPane(File image) {
     try {
-      WebcamPane frame = new WebcamPane();
-      frame.setVisible(true);
-      Insets ins = frame.getInsets();
-      frame.setSize(webcamWidth + ins.left + ins.right,
-          webcamHeight + ins.top + ins.bottom );
-      frame.startCapture();
-      //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void onUpdate(boolean i_is_marker_exist, Transform3D i_transform3d) {
-    if (i_is_marker_exist) {
-      /*
-       * TODO:Please write your behavior operation code here.
-        * マーカーの姿勢を元に他の３Dオブジェクトを操作するときは、ここに処理を書きます。*/
-    }
-  }
-
-  public void startCapture() throws Exception {
-    nya_behavior.start();
-  }
-
-  public WebcamPane() {
-    try {
-      //NyARToolkitの準備
+      this.imageFile = image;
+      //NyARToolkit Setup
       NyARCode ar_code = new NyARCode(16, 16);
       ar_code.loadARPattFromFile(CARCODE_FILE);
       ar_param = new J3dNyARParam();
@@ -179,6 +162,25 @@ public class WebcamPane extends JPanel
     }
   }
 
+  /* (non-Javadoc)
+   * @see jp.nyatla.nyartoolkit.java3d.utils.NyARSingleMarkerBehaviorListener#onUpdate(boolean, javax.media.j3d.Transform3D)
+   */
+  public void onUpdate(boolean i_is_marker_exist, Transform3D i_transform3d) {
+    if (i_is_marker_exist) {
+      /*
+       * TODO:Please write your behavior operation code here.
+        * マーカーの姿勢を元に他の３Dオブジェクトを操作するときは、ここに処理を書きます。*/
+    }
+  }
+
+  public void startCapture() throws Exception {
+    nya_behavior.start();
+  }
+
+  public void stopCapture() {
+    nya_behavior.stop();
+  }
+
   /**
    * Alpha blended visible texture.
    */
@@ -187,9 +189,9 @@ public class WebcamPane extends JPanel
     Transform3D mt = new Transform3D();
     mt.setTranslation(new Vector3d(0.00, 0.0, 20 * 0.001));
     tg.setTransform(mt);
-    float scale = 50f * 0.001f;
-    Appearance polygon1Appearance = new Appearance();
-    polygon1Appearance.setTransparencyAttributes(new TransparencyAttributes(
+    float scale = 60f * 0.001f;
+    Appearance imageAppearance = new Appearance();
+    imageAppearance.setTransparencyAttributes(new TransparencyAttributes(
         TransparencyAttributes.BLENDED, ALPHA_BLEND_AMOUNT));
     QuadArray polygon1 = new QuadArray(4, 
             QuadArray.COORDINATES | GeometryArray.TEXTURE_COORDINATE_2);
@@ -205,9 +207,9 @@ public class WebcamPane extends JPanel
     };
     polygon1.setTextureCoordinates(0, 0, texCoords);
     Texture texImage = new TextureLoader(
-      getClass().getResource("resources/duomo.jpg"), this).getTexture();
-    polygon1Appearance.setTexture (texImage);
-    tg.addChild(new Shape3D (polygon1, polygon1Appearance));
+      imageFile.getAbsolutePath(), this).getTexture();
+    imageAppearance.setTexture (texImage);
+    tg.addChild(new Shape3D (polygon1, imageAppearance));
     return tg;
   }
 }

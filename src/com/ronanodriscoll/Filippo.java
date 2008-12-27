@@ -30,6 +30,7 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.swing.AbstractAction;
@@ -47,12 +48,17 @@ public class Filippo extends JPanel {
   /**
    * Pane for show augmented webcam view.
    */
-  public WebcamPane webcamPane;
+  private WebcamPane webcamPane;
 
   /**
    * Toolbar for controlling display.
    */
-  public JToolBar toolBar;
+  private JToolBar toolBar;
+
+  /**
+   * Frame for displaying application.
+   */
+  private JFrame frame;
 
   /**
    * Default class constructor. Starts a splash screen and then initializes
@@ -100,8 +106,12 @@ public class Filippo extends JPanel {
 	    });
         int r = chooser.showOpenDialog(new JFrame());
         if (r == JFileChooser.APPROVE_OPTION) {
-         // String name = chooser.getSelectedFile()
-          //System.out.println(name);
+          webcamPane.stopCapture();
+          frame.getContentPane().remove(webcamPane);
+          initWebcam(chooser.getSelectedFile());
+          frame.getContentPane().add(webcamPane, BorderLayout.CENTER);
+          frame.pack();
+          frame.repaint();
         }
       }
     };
@@ -109,19 +119,16 @@ public class Filippo extends JPanel {
     openButton.setIcon(iconOpen);
     openButton.setToolTipText("Find the image to draw.");
     toolBar.add(openButton);
-	webcamPane = new WebcamPane();
-    webcamPane.setPreferredSize(new Dimension(WebcamPane.webcamWidth,
-    		WebcamPane.webcamHeight));
-    Insets ins = webcamPane.getInsets();
-    webcamPane.setSize(WebcamPane.webcamWidth + ins.left + ins.right,
-    		WebcamPane.webcamHeight + ins.top + ins.bottom );
+    File defaultImage = null;
     try {
-		webcamPane.startCapture();
-	} catch (Exception e1) {
-		e1.printStackTrace();
-	}
+      defaultImage = 
+        new File(getClass().getResource("resources/duomo.jpg").toURI());
+    } catch (URISyntaxException e2) {
+      e2.printStackTrace();
+    }
+	  initWebcam(defaultImage);
     toolBar.setMaximumSize(toolBar.getSize());
-    JFrame frame = new JFrame("Filippo Drawing Application");
+    frame = new JFrame("Filippo Drawing Application");
     URL imgURL = getClass().getResource("resources/dome.gif");
     frame.setIconImage(new ImageIcon(imgURL).getImage());
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -129,5 +136,24 @@ public class Filippo extends JPanel {
     frame.getContentPane().add(webcamPane, BorderLayout.CENTER);
     frame.pack();
     frame.setVisible(true);
+  }
+
+  /**
+   * Initialize the webcam pane;
+   *
+   * @param imageFile
+   */
+  private void initWebcam(File imageFile) {
+    webcamPane = new WebcamPane(imageFile);
+    webcamPane.setPreferredSize(new Dimension(WebcamPane.webcamWidth,
+    		WebcamPane.webcamHeight));
+    Insets ins = webcamPane.getInsets();
+    webcamPane.setSize(WebcamPane.webcamWidth + ins.left + ins.right,
+    		WebcamPane.webcamHeight + ins.top + ins.bottom );
+    try {
+		webcamPane.startCapture();
+  	} catch (Exception e1) {
+  		e1.printStackTrace();
+  	}
   }
 }
