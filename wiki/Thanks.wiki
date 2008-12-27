@@ -1,0 +1,10 @@
+#summary Thanks to APIs and libraries that made this application possible.
+#labels Thanks
+
+= Thanks =
+A great debt of gratitude is owed to all who release their efforts openly for others to use. This project would not be possible without the following:
+  * [http://nyatla.jp/nyartoolkit/ NyARToolkit]
+  * [http://java.sun.com/javase/technologies/desktop/java3d/ Java3D]
+  * [http://java.sun.com/javase/technologies/desktop/media/jmf/ Java Media Framework]
+  * [http://oreilly.com/catalog/9780596004088/ Java Swing, 2nd Edition]
+  * [http://www.famfamfam.com/ Icons by Fam fam fam]
