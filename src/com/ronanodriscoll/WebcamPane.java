@@ -84,13 +84,19 @@ public class WebcamPane extends JPanel
   private File imageFile;
 
   /**
+   * Image scale amount.
+   */
+  private float imageScale;
+
+  /**
    * Webcam pane constructor.
    *
    * @param image Image file
    */
-  public WebcamPane(File image) {
+  public WebcamPane(File image, float scaleAmount) {
     try {
       this.imageFile = image;
+      this.imageScale = scaleAmount;
       //NyARToolkit Setup
       NyARCode ar_code = new NyARCode(16, 16);
       ar_code.loadARPattFromFile(CARCODE_FILE);
@@ -187,29 +193,29 @@ public class WebcamPane extends JPanel
   private Node createSceneGraph() {
     TransformGroup tg = new TransformGroup();
     Transform3D mt = new Transform3D();
-    mt.setTranslation(new Vector3d(0.00, 0.0, 20 * 0.001));
+    mt.setTranslation(new Vector3d(0.00d, 0.00d, 20 * 0.001d));
     tg.setTransform(mt);
-    float scale = 60f * 0.001f;
+    float scale = imageScale * 0.001f;
     Appearance imageAppearance = new Appearance();
     imageAppearance.setTransparencyAttributes(new TransparencyAttributes(
         TransparencyAttributes.BLENDED, ALPHA_BLEND_AMOUNT));
-    QuadArray polygon1 = new QuadArray(4, 
+    QuadArray imagePoly = new QuadArray(4, 
             QuadArray.COORDINATES | GeometryArray.TEXTURE_COORDINATE_2);
-    polygon1.setCoordinate(0, new Point3f(0f * scale, 0f * scale, 0f * scale));
-    polygon1.setCoordinate(1, new Point3f(2f * scale, 0f * scale, 0f * scale));
-    polygon1.setCoordinate(2, new Point3f(2f * scale, 3f * scale, 0f * scale));
-    polygon1.setCoordinate(3, new Point3f(0f * scale, 3f * scale, 0f * scale));
+    imagePoly.setCoordinate(0, new Point3f(0f * scale, 0f * scale, 0f * scale));
+    imagePoly.setCoordinate(1, new Point3f(2f * scale, 0f * scale, 0f * scale));
+    imagePoly.setCoordinate(2, new Point3f(2f * scale, 3f * scale, 0f * scale));
+    imagePoly.setCoordinate(3, new Point3f(0f * scale, 3f * scale, 0f * scale));
     TexCoord2f[] texCoords = {
           new TexCoord2f(0.0f,0.0f),
           new TexCoord2f(1.0f,0.0f), 
           new TexCoord2f(1.0f,1.0f),
           new TexCoord2f(0.0f,1.0f)
     };
-    polygon1.setTextureCoordinates(0, 0, texCoords);
+    imagePoly.setTextureCoordinates(0, 0, texCoords);
     Texture texImage = new TextureLoader(
       imageFile.getAbsolutePath(), this).getTexture();
     imageAppearance.setTexture (texImage);
-    tg.addChild(new Shape3D (polygon1, imageAppearance));
+    tg.addChild(new Shape3D (imagePoly, imageAppearance));
     return tg;
   }
 }

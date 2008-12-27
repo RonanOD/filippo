@@ -26,10 +26,14 @@ package com.ronanodriscoll;
  * 
  */
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.File;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -39,7 +43,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 @SuppressWarnings("serial")
@@ -59,6 +66,16 @@ public class Filippo extends JPanel {
    * Frame for displaying application.
    */
   private JFrame frame;
+
+  /**
+   * The image to display.
+   */
+  private File imageFile;
+
+  /**
+   * Image scale amount.
+   */
+  private float imageScale;
 
   /**
    * Default class constructor. Starts a splash screen and then initializes
@@ -87,7 +104,16 @@ public class Filippo extends JPanel {
    * Class initialization method.
    */
   private void init() {
-    toolBar = new JToolBar("Ronan Toolbar");
+    // First set up variables that webcam pane needs to draw.
+    try {
+      imageFile = 
+        new File(getClass().getResource("resources/duomo.jpg").toURI());
+    } catch (URISyntaxException e) {
+      e.printStackTrace();
+    }
+    imageScale = 100f;
+    // Initialize toolbar.
+    toolBar = new JToolBar("Filippo Toolbar");
     ImageIcon iconOpen = new ImageIcon(
     		Filippo.class.getResource("resources/folder_image.png"));
     Action actionOpen = new AbstractAction("", iconOpen) {
@@ -106,27 +132,103 @@ public class Filippo extends JPanel {
 	    });
         int r = chooser.showOpenDialog(new JFrame());
         if (r == JFileChooser.APPROVE_OPTION) {
-          webcamPane.stopCapture();
-          frame.getContentPane().remove(webcamPane);
-          initWebcam(chooser.getSelectedFile());
-          frame.getContentPane().add(webcamPane, BorderLayout.CENTER);
-          frame.pack();
-          frame.repaint();
+          imageFile = chooser.getSelectedFile();
+          resetWebcam();
         }
       }
     };
+    // File open button
     JButton openButton = new JButton(actionOpen);
     openButton.setIcon(iconOpen);
     openButton.setToolTipText("Find the image to draw.");
     toolBar.add(openButton);
-    File defaultImage = null;
-    try {
-      defaultImage = 
-        new File(getClass().getResource("resources/duomo.jpg").toURI());
-    } catch (URISyntaxException e2) {
-      e2.printStackTrace();
-    }
-	  initWebcam(defaultImage);
+    toolBar.addSeparator();
+    // Scale text field.
+    toolBar.add(new JLabel("Scale:"));
+    JTextField scaleText = new JTextField();
+    scaleText.setMaximumSize(new Dimension(48, 24));
+    scaleText.setText("100");
+    scaleText.addFocusListener(new FocusListener () {
+      public void focusGained(FocusEvent e) { }
+      public void focusLost(FocusEvent e) {
+        JTextField field = (JTextField) e.getComponent();
+        try {
+          float newScale = Float.parseFloat(field.getText());
+          if (newScale != imageScale) {
+            imageScale = newScale;
+          }
+          field.setText(Float.toString(imageScale));
+        } catch (Exception ex) {
+          // Couldn't parse float
+        }
+      }});
+    toolBar.add(scaleText);
+    ImageIcon iconResize = new ImageIcon(
+        Filippo.class.getResource("resources/shape_move_backwards.png"));
+    Action actionResize = new AbstractAction("", iconResize) {
+      public void actionPerformed(ActionEvent e) {
+        resetWebcam();
+      }
+    };
+    // Resize button
+    JButton resizeButton = new JButton(actionResize);
+    resizeButton.setIcon(iconResize);
+    resizeButton.setToolTipText("Resize the image.");
+    toolBar.add(resizeButton);
+    // Webcam settings button
+    final ImageIcon iconWebcam = new ImageIcon(
+        Filippo.class.getResource("resources/webcam.png"));
+    Action actionWebcam = new AbstractAction("", iconWebcam) {
+      public void actionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(frame,
+            "Webcam settings not yet implemented",
+            "Webcam Settings",
+            JOptionPane.INFORMATION_MESSAGE,
+            iconWebcam);
+      }
+    };
+    JButton webcamButton = new JButton(actionWebcam);
+    webcamButton.setIcon(iconWebcam);
+    webcamButton.setToolTipText("Webcam Settings.");
+    toolBar.add(webcamButton);
+    // Colour settings button
+    final ImageIcon iconColour = new ImageIcon(
+        Filippo.class.getResource("resources/color_wheel.png"));
+    Action actionColour = new AbstractAction("", iconColour) {
+      public void actionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(frame,
+            "Colour details not yet implemented.\n" +
+            "This will allow you to pick a colour from your image\n" +
+            "and see what paints mix best with it.",
+            "Colour Details",
+            JOptionPane.INFORMATION_MESSAGE,
+            iconColour);
+      }
+    };
+    JButton colourButton = new JButton(actionColour);
+    colourButton.setIcon(iconColour);
+    colourButton.setToolTipText("Find Colour Details.");
+    toolBar.add(colourButton);
+    toolBar.addSeparator();
+    // Help and home button
+    final ImageIcon iconHome = new ImageIcon(
+        Filippo.class.getResource("resources/world.png"));
+    Action actionHome = new AbstractAction("", iconHome) {
+      public void actionPerformed(ActionEvent e) {
+        try {
+          Desktop.getDesktop().browse(
+              new URI("http://code.google.com/p/filippo/"));
+        } catch (Exception e1) {
+          e1.printStackTrace();
+        } 
+      }
+    };
+    JButton homeButton = new JButton(actionHome);
+    homeButton.setIcon(iconHome);
+    homeButton.setToolTipText("Application details.");
+    toolBar.add(homeButton);
+    // Webcam initialize.
+	  initWebcam(imageFile, imageScale);
     toolBar.setMaximumSize(toolBar.getSize());
     frame = new JFrame("Filippo Drawing Application");
     URL imgURL = getClass().getResource("resources/dome.gif");
@@ -142,9 +244,10 @@ public class Filippo extends JPanel {
    * Initialize the webcam pane;
    *
    * @param imageFile
+   * @param scale image scale
    */
-  private void initWebcam(File imageFile) {
-    webcamPane = new WebcamPane(imageFile);
+  private void initWebcam(File imageFile, float scale) {
+    webcamPane = new WebcamPane(imageFile, scale);
     webcamPane.setPreferredSize(new Dimension(WebcamPane.webcamWidth,
     		WebcamPane.webcamHeight));
     Insets ins = webcamPane.getInsets();
@@ -155,5 +258,17 @@ public class Filippo extends JPanel {
   	} catch (Exception e1) {
   		e1.printStackTrace();
   	}
+  }
+
+  /**
+   * Reset the webcam to take new user parameters.
+   */
+  private void resetWebcam() {
+    webcamPane.stopCapture();
+    frame.getContentPane().remove(webcamPane);
+    initWebcam(imageFile, imageScale);
+    frame.getContentPane().add(webcamPane, BorderLayout.CENTER);
+    frame.pack();
+    frame.repaint();
   }
 }
