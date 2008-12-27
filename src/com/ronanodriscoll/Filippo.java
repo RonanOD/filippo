@@ -217,7 +217,7 @@ public class Filippo extends JPanel {
       public void actionPerformed(ActionEvent e) {
         try {
           Desktop.getDesktop().browse(
-              new URI("http://code.google.com/p/filippo/"));
+              new URI("http://ronanodriscoll.googlepages.com/filippo"));
         } catch (Exception e1) {
           e1.printStackTrace();
         } 
