@@ -1,0 +1,15 @@
+#summary instructions for developers
+#labels Featured,Phase-Implementation
+
+= Introduction =
+This page describes how to set up a developer environment to install [Summary filippo].
+
+
+= Details =
+Ensure you have the following installed:
+  # [http://eclipse.org Eclipse Java IDE] and [http://subclipse.tigris.org/ the subversion plugin.]
+  # [http://java.sun.com/javase/technologies/desktop/java3d/ Java3D]
+  # [http://java.sun.com/javase/technologies/desktop/media/jmf/ Java Media Framework]
+  # [http://nyatla.jp/nyartoolkit/wiki/index.php?NyARToolkit%20for%20Java.en NyARToolkit]. This site is mostly in Japanese :-). Just download the latest Java bundle and import the main projects into eclipse.
+  # Use subclipse to import the main trunk into eclipse.
+  # Run the main filippo class.
