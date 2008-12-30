@@ -247,7 +247,13 @@ public class Filippo extends JPanel {
    * @param scale image scale
    */
   private void initWebcam(File imageFile, float scale) {
-    webcamPane = new WebcamPane(imageFile, scale);
+	try {
+	  webcamPane = new WebcamPane(imageFile, scale);
+	} catch (java.lang.UnsatisfiedLinkError e) {
+      //TODO: Figure out a way to load j3d dlls.
+	  e.printStackTrace();
+	  return;
+	}
     webcamPane.setPreferredSize(new Dimension(WebcamPane.webcamWidth,
     		WebcamPane.webcamHeight));
     Insets ins = webcamPane.getInsets();
