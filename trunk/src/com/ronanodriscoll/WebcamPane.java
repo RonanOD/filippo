@@ -41,9 +41,7 @@ import jp.nyatla.nyartoolkit.java3d.utils.*;
 
 
 /**
- * Java3Dサンプルプログラム
- * 単一マーカー追跡用のBehaviorを使って、背景と１個のマーカーに連動した
- * TransformGroupを動かします。
+ * Webcam panel. 
  *
  */
 @SuppressWarnings("serial")
@@ -62,16 +60,14 @@ public class WebcamPane extends JPanel
   */
   private static final float ALPHA_BLEND_AMOUNT =  0.5f;
 
-  private final String CARCODE_FILE = "Data/patt.hiro";
+  private final String CARCODE_FILE = "resources/patt.hiro";
 
-  private final String PARAM_FILE = "Data/camera_para.dat";
+  private final String PARAM_FILE = "resources/camera_para.dat";
 
-  //NyARToolkit関係
   private NyARSingleMarkerBehaviorHolder nya_behavior;
 
   private J3dNyARParam ar_param;
 
-  //universe関係
   private Canvas3D canvas;
 
   private Locale locale;
@@ -98,12 +94,11 @@ public class WebcamPane extends JPanel
       this.imageFile = image;
       this.imageScale = scaleAmount;
       //NyARToolkit Setup
-      NyARCode ar_code = new NyARCode(16, 16);
-      ar_code.loadARPattFromFile(CARCODE_FILE);
+      NyARCode ar_code = new NyARCode(16, 16);      
+      ar_code.loadARPattFromFile(Filippo.loadResourceLocally(CARCODE_FILE));
       ar_param = new J3dNyARParam();
-      ar_param.loadARParamFromFile(PARAM_FILE);
+      ar_param.loadARParamFromFile(Filippo.loadResourceLocally(PARAM_FILE));
       ar_param.changeScreenSize(320, 240);
-      //localeの作成とlocateとviewの設定
       universe = new VirtualUniverse();
       locale = new Locale(universe);
       canvas = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
@@ -113,14 +108,11 @@ public class WebcamPane extends JPanel
       view.addCanvas3D(canvas);
       view.setPhysicalBody(new PhysicalBody());
       view.setPhysicalEnvironment(new PhysicalEnvironment());
-  
-      //視界の設定(カメラ設定から取得)
+
       Transform3D camera_3d = ar_param.getCameraTransform();
       view.setCompatibilityModeEnable(true);
       view.setProjectionPolicy(View.PERSPECTIVE_PROJECTION);
       view.setLeftProjection(camera_3d);
-  
-      //視点設定(0,0,0から、Y軸を180度回転してZ+方向を向くようにする。)
       TransformGroup viewGroup = new TransformGroup();
       Transform3D viewTransform = new Transform3D();
       viewTransform.rotY(Math.PI);
@@ -130,8 +122,6 @@ public class WebcamPane extends JPanel
       BranchGroup viewRoot = new BranchGroup();
       viewRoot.addChild(viewGroup);
       locale.addBranchGraph(viewRoot);
-  
-      //バックグラウンドの作成
       Background background = new Background();
       BoundingSphere bounds = new BoundingSphere();
       bounds.setRadius(10.0);
@@ -140,27 +130,18 @@ public class WebcamPane extends JPanel
       background.setCapability(Background.ALLOW_IMAGE_WRITE);
       BranchGroup root = new BranchGroup();
       root.addChild(background);
-  
-      //TransformGroupで囲ったシーングラフの作成
       TransformGroup transform = new TransformGroup();
       transform.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
       transform.addChild(createSceneGraph());
       root.addChild(transform);
-  
-      //NyARToolkitのBehaviorを作る。(マーカーサイズはメートルで指定すること)
       nya_behavior = new NyARSingleMarkerBehaviorHolder(ar_param, 30f, 
           ar_code, 0.08);
-      //Behaviorに連動するグループをセット
       nya_behavior.setTransformGroup(transform);
       nya_behavior.setBackGround(background);
-      //出来たbehaviorをセット
       root.addChild(nya_behavior.getBehavior());
       nya_behavior.setUpdateListener(this);
-  
-      //表示ブランチをLocateにセット
       locale.addBranchGraph(root);
   
-      //ウインドウの設定
       setLayout(new BorderLayout());
       add(canvas, BorderLayout.CENTER);
     } catch(Exception e) {
@@ -168,14 +149,14 @@ public class WebcamPane extends JPanel
     }
   }
 
-  /* (non-Javadoc)
+/* (non-Javadoc)
    * @see jp.nyatla.nyartoolkit.java3d.utils.NyARSingleMarkerBehaviorListener#onUpdate(boolean, javax.media.j3d.Transform3D)
    */
   public void onUpdate(boolean i_is_marker_exist, Transform3D i_transform3d) {
     if (i_is_marker_exist) {
       /*
        * TODO:Please write your behavior operation code here.
-        * マーカーの姿勢を元に他の３Dオブジェクトを操作するときは、ここに処理を書きます。*/
+       **/
     }
   }
 

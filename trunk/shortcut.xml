@@ -1,0 +1,15 @@
+<shortcuts>
+  <programGroup defaultName="Filippo Drawing Application" location="applications"/>
+<shortcut
+     name="filippo"
+     target="$INSTALL_PATH/filippo.exe"
+     description="Filippo Drawing Application"
+     initialState="normal"
+     programGroup="no"
+     desktop="yes"
+     applications="no"
+     startMenu="yes"
+     startup="no">
+</shortcut>
+
+</shortcuts>

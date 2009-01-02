@@ -1,0 +1,41 @@
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\workspace2\Filippo\jar\filippo.jar</jar>
+  <outfile>C:\workspace2\Filippo\filippo.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir></chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <customProcName>false</customProcName>
+  <stayAlive>false</stayAlive>
+  <manifest></manifest>
+  <icon></icon>
+  <classPath>
+    <mainClass>com.ronanodriscoll.Filippo</mainClass>
+    <cp>./lib/j3dcore.jar</cp>
+    <cp>./lib/j3dutils.jar</cp>
+    <cp>./lib/jmf.jar</cp>
+    <cp>./lib/vecmath.jar</cp>
+  </classPath>
+  <jre>
+    <path>./jre6</path>
+    <minVersion>1.6.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>jreOnly</jdkPreference>
+  </jre>
+  <versionInfo>
+    <fileVersion>0.0.0.1</fileVersion>
+    <txtFileVersion>alpha 0.0.0.1</txtFileVersion>
+    <fileDescription>Alpha version</fileDescription>
+    <copyright>MIT License</copyright>
+    <productVersion>0.0.0.1</productVersion>
+    <txtProductVersion>alpha 0.0.0.1</txtProductVersion>
+    <productName>Filippo</productName>
+    <companyName></companyName>
+    <internalName>alpha 0.0.0.1</internalName>
+    <originalFilename>filippo.exe</originalFilename>
+  </versionInfo>
+</launch4jConfig>

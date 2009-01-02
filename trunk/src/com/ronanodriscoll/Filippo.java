@@ -33,9 +33,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -101,14 +107,40 @@ public class Filippo extends JPanel {
   }
 
   /**
+   * Load a resource from a jar to a local temporary directory. File to be
+   * deleted on VM shutdown.
+   *
+   * @param resourceName Name of resource to load.
+   * @return full file path to resource. To be deleted on exit.
+   * @throws IOException 
+   */
+  public static String loadResourceLocally(String resourceName)
+      throws IOException {
+    InputStream is = Filippo.class.getResourceAsStream(resourceName);
+    String newFileName = resourceName.replaceAll("/", "_");
+    File temp = File.createTempFile(newFileName, ".tmp");
+    temp.deleteOnExit();
+    final OutputStream output = new FileOutputStream(temp);  
+    // get an channel from the stream  
+    final ReadableByteChannel inputChannel = Channels.newChannel(is);  
+    final WritableByteChannel outputChannel = Channels.newChannel(output);
+    // copy the channels  
+    ChannelTools.fastChannelCopy(inputChannel, outputChannel);  
+    // closing the channels  
+    inputChannel.close();
+    outputChannel.close();  
+    return temp.getAbsolutePath();
+  }
+
+  /**
    * Class initialization method.
    */
   private void init() {
     // First set up variables that webcam pane needs to draw.
     try {
       imageFile = 
-        new File(getClass().getResource("resources/duomo.jpg").toURI());
-    } catch (URISyntaxException e) {
+        new File(loadResourceLocally("resources/duomo.jpg"));
+    } catch (Exception e) {
       e.printStackTrace();
     }
     imageScale = 100f;
