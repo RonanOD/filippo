@@ -9,3 +9,5 @@ A great debt of gratitude is owed to all who release their efforts openly for ot
   * [http://eclipse.org Eclipse Java IDE]
   * [http://oreilly.com/catalog/9780596004088/ Java Swing, 2nd Edition]
   * [http://www.famfamfam.com/ Icons by Fam fam fam]
+  * [http://launch4j.sourceforge.net/ Launch4J for making Windows executables]
+  * [http://izpack.org/ IzPack to make the application installer]
