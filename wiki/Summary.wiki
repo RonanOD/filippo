@@ -10,3 +10,4 @@ The name Filippo comes from Filippo Brunellschi who designed the dome of Florenc
 Main wiki pages of this site:
  * [DeveloperInstall Developer install instructions]
  * [Thanks Thanks to all who made this possible]
+ * [Installation Details on installing client]
