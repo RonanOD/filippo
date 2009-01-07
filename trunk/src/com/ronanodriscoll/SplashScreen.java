@@ -84,21 +84,8 @@ public class SplashScreen extends JWindow {
     try {
       Thread.sleep(duration);
     } catch (Exception e) {
+      Filippo.reportException(e);
     }
-
     setVisible(false);
-  }
-
-  public void showSplashAndExit() {
-    showSplash();
-    System.exit(0);
-  }
-
-  public static void main(String[] args) {
-    // Throw a nice little title page up on the screen first
-    SplashScreen splash = new SplashScreen(10000);
-    // Normally, we'd call splash.showSplash() and get on with the program.
-    // But, since this is only a test...
-    splash.showSplashAndExit();
   }
 }

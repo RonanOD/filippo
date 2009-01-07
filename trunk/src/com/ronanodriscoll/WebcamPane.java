@@ -145,7 +145,7 @@ public class WebcamPane extends JPanel
       setLayout(new BorderLayout());
       add(canvas, BorderLayout.CENTER);
     } catch(Exception e) {
-      e.printStackTrace();
+      Filippo.reportException(e);
     }
   }
 

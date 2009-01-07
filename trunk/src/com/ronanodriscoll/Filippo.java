@@ -103,7 +103,21 @@ public class Filippo extends JPanel {
    * @throws Exception
    */
   public static void main(String s[]) {
-    new Filippo();
+    try {
+      new Filippo();
+    } catch (Exception e) {
+      reportException(e);
+    }
+  }
+
+  /**
+   * Report an exception in a dialog.
+   *
+   * @param e Exception to report
+   */
+  public static void reportException(Throwable e) {
+    JOptionPane.showMessageDialog(new JFrame(),
+        e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
   }
 
   /**
@@ -141,7 +155,7 @@ public class Filippo extends JPanel {
       imageFile = 
         new File(loadResourceLocally("resources/duomo.jpg"));
     } catch (Exception e) {
-      e.printStackTrace();
+      reportException(e);
     }
     imageScale = 100f;
     // Initialize toolbar.
@@ -191,7 +205,7 @@ public class Filippo extends JPanel {
           }
           field.setText(Float.toString(imageScale));
         } catch (Exception ex) {
-          // Couldn't parse float
+          reportException(ex);
         }
       }});
     toolBar.add(scaleText);
@@ -250,8 +264,8 @@ public class Filippo extends JPanel {
         try {
           Desktop.getDesktop().browse(
               new URI("http://ronanodriscoll.googlepages.com/filippo"));
-        } catch (Exception e1) {
-          e1.printStackTrace();
+        } catch (Exception ex) {
+          reportException(ex);
         } 
       }
     };
@@ -282,8 +296,7 @@ public class Filippo extends JPanel {
 	try {
 	  webcamPane = new WebcamPane(imageFile, scale);
 	} catch (java.lang.UnsatisfiedLinkError e) {
-      //TODO: Figure out a way to load j3d dlls.
-	  e.printStackTrace();
+	  reportException(e);
 	  return;
 	}
     webcamPane.setPreferredSize(new Dimension(WebcamPane.webcamWidth,
@@ -294,7 +307,7 @@ public class Filippo extends JPanel {
     try {
 		webcamPane.startCapture();
   	} catch (Exception e1) {
-  		e1.printStackTrace();
+  	  reportException(e1);
   	}
   }
 
