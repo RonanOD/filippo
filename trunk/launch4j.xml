@@ -12,7 +12,7 @@
   <customProcName>false</customProcName>
   <stayAlive>false</stayAlive>
   <manifest></manifest>
-  <icon></icon>
+  <icon>webcam.ico</icon>
   <classPath>
     <mainClass>com.ronanodriscoll.Filippo</mainClass>
     <cp>./lib/j3dcore.jar</cp>
