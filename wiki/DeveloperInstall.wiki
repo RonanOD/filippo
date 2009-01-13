@@ -13,3 +13,5 @@ Ensure you have the following installed:
   # [http://nyatla.jp/nyartoolkit/wiki/index.php?NyARToolkit%20for%20Java.en NyARToolkit]. This site is mostly in Japanese :-). Just download the latest Java bundle and import the main projects into eclipse.
   # Use subclipse to import the main trunk into eclipse.
   # Run the main filippo class.
+  # Adjust the classpaths of all projects to point to your versions of Java3D and JMF.
+  # You will need to have printed out the pdf with Hiro on it to see the AR effect.
