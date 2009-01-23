@@ -6,7 +6,7 @@
      description="Filippo Drawing Application"
      initialState="normal"
      desktop="yes"
-     startMenu="yes"
+     startMenu="no"
      startup="no">
 </shortcut>
 
