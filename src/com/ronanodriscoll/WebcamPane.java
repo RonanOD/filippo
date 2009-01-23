@@ -45,8 +45,8 @@ import jp.nyatla.nyartoolkit.java3d.utils.*;
  *
  */
 @SuppressWarnings("serial")
-public class WebcamPane extends JPanel
-  implements NyARSingleMarkerBehaviorListener {
+public class WebcamPane extends JPanel implements 
+                                            NyARSingleMarkerBehaviorListener {
  /**
   * Webcam screen width.  
   */
@@ -108,7 +108,6 @@ public class WebcamPane extends JPanel
       view.addCanvas3D(canvas);
       view.setPhysicalBody(new PhysicalBody());
       view.setPhysicalEnvironment(new PhysicalEnvironment());
-
       Transform3D camera_3d = ar_param.getCameraTransform();
       view.setCompatibilityModeEnable(true);
       view.setProjectionPolicy(View.PERSPECTIVE_PROJECTION);

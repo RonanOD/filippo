@@ -315,11 +315,14 @@ public class Filippo extends JPanel {
    * Reset the webcam to take new user parameters.
    */
   private void resetWebcam() {
+    // Save current width and height.
+    Dimension current = frame.getSize();
     webcamPane.stopCapture();
     frame.getContentPane().remove(webcamPane);
     initWebcam(imageFile, imageScale);
     frame.getContentPane().add(webcamPane, BorderLayout.CENTER);
     frame.pack();
     frame.repaint();
+    frame.setSize(current); // Reset current size.
   }
 }
