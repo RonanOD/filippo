@@ -29,6 +29,7 @@ package com.ronanodriscoll;
 import java.awt.BorderLayout;
 import javax.media.j3d.*;
 
+import com.ronanodriscoll.ar.SingleMarkerBehaviorHolder;
 import com.sun.j3d.utils.universe.*;
 import com.sun.j3d.utils.image.TextureLoader;
 import java.io.File;
@@ -64,7 +65,7 @@ public class WebcamPane extends JPanel implements
 
   private final String PARAM_FILE = "resources/camera_para.dat";
 
-  private NyARSingleMarkerBehaviorHolder nya_behavior;
+  private SingleMarkerBehaviorHolder nya_behavior;
 
   private J3dNyARParam ar_param;
 
@@ -133,7 +134,7 @@ public class WebcamPane extends JPanel implements
       transform.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
       transform.addChild(createSceneGraph());
       root.addChild(transform);
-      nya_behavior = new NyARSingleMarkerBehaviorHolder(ar_param, 30f, 
+      nya_behavior = new SingleMarkerBehaviorHolder(ar_param, 30f, 
           ar_code, 0.08);
       nya_behavior.setTransformGroup(transform);
       nya_behavior.setBackGround(background);
