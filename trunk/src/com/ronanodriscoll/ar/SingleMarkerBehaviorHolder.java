@@ -159,7 +159,7 @@ public class SingleMarkerBehaviorHolder implements JmfCaptureListener {
     try {
       synchronized (this._nya_raster) {
         // This code flips the image in the buffer to stop mirror effect.
-        BufferToImage b2i = 
+  /*      BufferToImage b2i = 
           new BufferToImage((VideoFormat) i_buffer.getFormat());
         Image img = b2i.createImage(i_buffer);
         if (img instanceof BufferedImage) {
@@ -167,7 +167,7 @@ public class SingleMarkerBehaviorHolder implements JmfCaptureListener {
         } else {
           throw new RuntimeException("Image not buffered.");
         }
-        i_buffer = ImageToBuffer.createBuffer(img, 15f);
+        i_buffer = ImageToBuffer.createBuffer(img, 15f);*/
         this._nya_raster.setBuffer(i_buffer);
       }
     } catch (Exception e) {
