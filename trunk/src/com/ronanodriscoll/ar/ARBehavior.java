@@ -40,7 +40,6 @@ import javax.vecmath.Point3d;
 
 import jp.nyatla.nyartoolkit.core.transmat.NyARTransMatResult;
 import jp.nyatla.nyartoolkit.detector.NyARSingleDetectMarker;
-import jp.nyatla.nyartoolkit.java3d.utils.J3dNyARRaster_RGB;
 import jp.nyatla.nyartoolkit.java3d.utils.NyARSingleMarkerBehaviorListener;
 
 /**
@@ -57,7 +56,7 @@ public class ARBehavior extends Behavior {
 
   private Background back_ground;
 
-  private J3dNyARRaster_RGB raster;
+  private J3dARRaster_RGB raster;
 
   private WakeupCondition wakeup;
 
@@ -75,7 +74,7 @@ public class ARBehavior extends Behavior {
    * @param i_related_ic2d
    */
   public ARBehavior(NyARSingleDetectMarker i_related_nya,
-      J3dNyARRaster_RGB i_related_raster, float i_rate) {
+      J3dARRaster_RGB i_related_raster, float i_rate) {
     super();
     wakeup = new WakeupOnElapsedTime((int) (1000 / i_rate));
     related_nya = i_related_nya;
