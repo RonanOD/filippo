@@ -27,23 +27,18 @@
 package com.ronanodriscoll.ar;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import javax.media.Buffer;
-import javax.media.format.VideoFormat;
 import javax.media.j3d.Background;
 import javax.media.j3d.Behavior;
 import javax.media.j3d.TransformGroup;
-import javax.media.util.BufferToImage;
-import javax.media.util.ImageToBuffer;
 
 import jp.nyatla.nyartoolkit.NyARException;
 import jp.nyatla.nyartoolkit.core.NyARCode;
 import jp.nyatla.nyartoolkit.core.param.NyARParam;
 import jp.nyatla.nyartoolkit.core.types.NyARIntSize;
 import jp.nyatla.nyartoolkit.detector.NyARSingleDetectMarker;
-import jp.nyatla.nyartoolkit.java3d.utils.J3dNyARRaster_RGB;
 import jp.nyatla.nyartoolkit.java3d.utils.NyARSingleMarkerBehaviorListener;
 import jp.nyatla.nyartoolkit.jmf.utils.JmfCaptureDevice;
 import jp.nyatla.nyartoolkit.jmf.utils.JmfCaptureDeviceList;
@@ -70,7 +65,7 @@ public class SingleMarkerBehaviorHolder implements JmfCaptureListener {
    * RGB raster class for Java3D. Note in Japanese: As a maximum of 3 threads
    * can be shared, this takes exclusive access.
    */
-  private J3dNyARRaster_RGB _nya_raster;
+  private J3dARRaster_RGB _nya_raster;
 
   /**
    * Single marker detection class.
@@ -108,7 +103,7 @@ public class SingleMarkerBehaviorHolder implements JmfCaptureListener {
     }
     this._capture.setCaptureFormat(scr_size.w, scr_size.h,15f);
     this._capture.setOnCapture(this);   
-    this._nya_raster = new J3dNyARRaster_RGB(
+    this._nya_raster = new J3dARRaster_RGB(
         this._cparam,this._capture.getCaptureFormat());
     this._nya = new NyARSingleDetectMarker(
         this._cparam, i_ar_code, i_marker_width);
