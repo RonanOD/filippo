@@ -51,11 +51,6 @@ public class J3dARRaster_RGB extends JmfNyARRaster_RGB {
   private BufferedImage bufferd_image;
 
   /**
-   * Flip image flag.
-   */
-  private boolean isFlipped = false;
-
-  /**
    * Constructor
    * @param i_cparam
    * @param i_format
@@ -64,12 +59,10 @@ public class J3dARRaster_RGB extends JmfNyARRaster_RGB {
   public J3dARRaster_RGB(NyARParam i_cparam,VideoFormat i_format)
       throws NyARException {
     super(i_cparam.getScreenSize(),i_format);
-    //bufferdimageの種類を決める
     if(this._reader.getBufferType() != 
         INyARBufferReader.BUFFERFORMAT_BYTE1D_B8G8R8_24){
       throw new NyARException();
     }
-    //RGBのラスタを作る。
     this.bufferd_image = new BufferedImage(
         this._size.w, this._size.h, BufferedImage.TYPE_3BYTE_BGR);
     i2d_buf = 
@@ -79,43 +72,44 @@ public class J3dARRaster_RGB extends JmfNyARRaster_RGB {
     imc2d.setCapability(ImageComponent.ALLOW_IMAGE_WRITE);
   }
 
-  /**
-   * JMFのキャプチャ画像をこのクラスのBufferedImageにコピーします。
-   * @param i_buffer
-   * 画像の格納されたバッファを指定して下さい。
-   * 画像サイズはコンストラクタで与えたパラメタと同じサイズである必要があります。
-   */
   public void setBuffer(javax.media.Buffer i_buffer) throws NyARException {
     this._reader.changeBuffer(i_buffer);
     synchronized (this){
-      //キャプチャデータをi2dのバッファにコピーする。
-      //現在はJmfNyARRaster_RGBでRGB画像がノーマライズされているので、
-      //ここでもう一度flipする。（これ省略したいなあ…。）
       byte[] src=(byte[])this._reader.getBuffer();
-      if (isFlipped) {
       final int length = this._size.w * 3;
-        int src_idx = 0;
-        int dest_idx = (this._size.h - 1) * length;     
-        for (int i = 0; i < this._size.h; i++) {
-          System.arraycopy(src,src_idx, this.i2d_buf, dest_idx, length);
-          src_idx += length;
-          dest_idx -= length;
-        }
-      } else {
-        System.arraycopy(src,0,this.i2d_buf,0,this.i2d_buf.length);
-        this.i2d_buf=(byte[])i_buffer.getData();
+      int src_idx = 0;
+      int dest_idx = (this._size.h - 1) * length;     
+      for (int i = 0; i < this._size.h; i++) {
+        System.arraycopy(src,src_idx, this.i2d_buf, dest_idx, length);
+        src_idx += length;
+        dest_idx -= length;
       }
+      // Flip the image to remove the mirror image effect.
+      flip(src, false);
     }
     return;
   }
 
-  /**
-   * 自身の格納しているImageComponent2Dオブジェクトを作り直します。
-   * Java3D1.5がDirectXで動いた（らしいとき）に、ImageComponent2Dのインスタンス
-   * IDが異ならないと、Behavior内でイメージの更新を通知できない事象に対応するために実装してあります。
-   * Behavior内でgetImageComponent2()関数を実行する直前に呼び出すことで、この事象を回避することができます。
-   * 
-   */
+  private void flip(byte[] src, boolean vertical) {
+    int bytesPerPixel = 3 / this._size.w;
+    int destBytesPerLine = this._size.w * bytesPerPixel;
+    for (int srcY = 0; srcY < this._size.h; srcY++) {
+      for (int srcX = 0; srcX < this._size.w; srcX++) {
+        int destX = 0, destY = 0, destIndex = 0, srcIndex = 0;
+        if (vertical) {
+          destX = srcX;
+          destY = this._size.h - srcY - 1;
+        } else {
+          destX = this._size.w - srcX - 1;
+          destY = srcY;
+        }
+        destIndex = (destY * destBytesPerLine) + (destX * bytesPerPixel);
+        srcIndex = (srcY * 3) + (srcX * bytesPerPixel);
+        System.arraycopy(src, srcIndex, this.i2d_buf, destIndex, bytesPerPixel);
+      }
+    }
+  }  
+
   public void renewImageComponent2D() {
     this.imc2d = new ImageComponent2D(
         ImageComponent2D.FORMAT_RGB, this.bufferd_image, true, true);
