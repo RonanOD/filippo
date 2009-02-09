@@ -27,15 +27,15 @@
     <jdkPreference>jreOnly</jdkPreference>
   </jre>
   <versionInfo>
-    <fileVersion>0.0.0.1</fileVersion>
-    <txtFileVersion>alpha 0.0.0.1</txtFileVersion>
+    <fileVersion>0.0.0.3</fileVersion>
+    <txtFileVersion>alpha 0.0.0.3</txtFileVersion>
     <fileDescription>Alpha version</fileDescription>
     <copyright>MIT License</copyright>
-    <productVersion>0.0.0.1</productVersion>
-    <txtProductVersion>alpha 0.0.0.1</txtProductVersion>
+    <productVersion>0.0.0.3</productVersion>
+    <txtProductVersion>alpha 0.0.0.3</txtProductVersion>
     <productName>Filippo</productName>
     <companyName></companyName>
-    <internalName>alpha 0.0.0.1</internalName>
+    <internalName>alpha 0.0.0.3</internalName>
     <originalFilename>filippo.exe</originalFilename>
   </versionInfo>
 </launch4jConfig>

@@ -22,3 +22,8 @@ This application requires:
  * A place to draw near your computer so you can see the screen as you draw.
 
 Have fun!
+
+Release Notes
+=============
+
+Version 0.0.0.3 : "Magic lens" version. Webcam image is no longer mirrored. 
